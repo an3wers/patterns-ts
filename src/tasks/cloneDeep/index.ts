@@ -1,6 +1,11 @@
+/*
+    Сделайте обработку для объектов и массивов;
+    Не забудьте скопировать вложенные элементы массивов и свойства объектов.
+*/
+
 function cloneDeep<T extends object = object>(obj: T) {
   return (function _cloneDeep(
-    item: T,
+    item: T
   ): T | Date | Set<unknown> | Map<unknown, unknown> | object | T[] {
     // Handle:
     // * null
@@ -58,7 +63,7 @@ function cloneDeep<T extends object = object>(obj: T) {
       // Handle:
       // * Object.symbol
       Object.getOwnPropertySymbols(item).forEach(
-        (s) => (copy[s] = _cloneDeep(item[s])),
+        (s) => (copy[s] = _cloneDeep(item[s]))
       );
 
       // Handle:
@@ -70,6 +75,33 @@ function cloneDeep<T extends object = object>(obj: T) {
 
     throw new Error(`Unable to copy object: ${item}`);
   })(obj);
+}
+
+export function simpleCloneDeep<T extends object = object>(obj: T) {
+  let clone;
+
+  // Если объект является массивом
+  if (Array.isArray(obj)) {
+    clone = obj.slice(); // создаем новый массив с элементами оригинала
+    // Пробегаем все элементы массива
+    for (let i = 0; i < clone.length; i++) {
+      clone[i] = cloneDeep(clone[i]); // рекурсивно копируем вложенные объекты/массивы
+    }
+  }
+  // Если объект является литеральным объектом
+  else if (typeof obj === "object" && obj !== null) {
+    clone = { ...obj }; // создаем новый объект с теми же свойствами, что и оригинал
+    // Пробегаем все свойства объекта
+    for (let prop in clone) {
+      if (clone.hasOwnProperty(prop)) {
+        clone[prop] = cloneDeep(clone[prop]); // рекурсивно копируем вложенные объекты/массивы
+      }
+    }
+  } else {
+    return obj; // если аргумент не массив и не объект, просто возвращаем его же
+  }
+
+  return clone;
 }
 
 export default cloneDeep;

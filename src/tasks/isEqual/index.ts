@@ -28,7 +28,8 @@ function isArrayOrObject(value: unknown): value is [] | PlainObject {
   иначе просто проверяем значения на строгое равенство.
 */
 
-function isEqual(lhs: PlainObject | [], rhs: PlainObject | []) {
+export function isEqual(lhs: PlainObject | [], rhs: PlainObject | []) {
+  // TODO: check if lhs or rhs typeof !== 'function'
   if (typeof lhs !== "object" && typeof rhs !== "object") {
     return lhs === rhs;
   }
@@ -48,6 +49,7 @@ function isEqual(lhs: PlainObject | [], rhs: PlainObject | []) {
       return false;
     }
 
+    // Если значения переданного объекта примитивы
     if (value !== rightValue) {
       return false;
     }

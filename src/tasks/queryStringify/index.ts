@@ -16,6 +16,7 @@ function queryStringify(data: StringIndexed): string | never {
   }
 
   const keys = Object.keys(data);
+
   return keys.reduce((result, key, index) => {
     const value = data[key];
     const endLine = index < keys.length - 1 ? "&" : "";
@@ -26,7 +27,7 @@ function queryStringify(data: StringIndexed): string | never {
           ...result,
           [`${key}[${index}]`]: arrData,
         }),
-        {},
+        {}
       );
 
       return `${result}${queryStringify(arrayValue)}${endLine}`;
@@ -38,7 +39,7 @@ function queryStringify(data: StringIndexed): string | never {
           ...result,
           [`${key}[${objKey}]`]: value[objKey],
         }),
-        {},
+        {}
       );
 
       return `${result}${queryStringify(objValue)}${endLine}`;
@@ -48,6 +49,6 @@ function queryStringify(data: StringIndexed): string | never {
   }, "");
 }
 
-console.log(queryStringify(obj));
+console.log(">> queryStringify >> ", queryStringify(obj));
 
 export default queryStringify;
